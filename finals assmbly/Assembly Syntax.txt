@@ -1,0 +1,62 @@
+.model small   
+.stack 100h
+.data
+
+array1 db 6 dup (?)    ;array of 6 is initalize with 6 ??????
+tem db 10    ;variable declared  
+mg db 0ah,0dh,"Enter the Number:$"   ;string 
+msg1 db 0ah,0dh,"function$"
+hmm db 0ah,0dh,"$"   ;0ah,0dh, (is used as next line
+ 
+.code 
+
+mov ax, @data
+mov ds, ax
+
+mov cx,5
+
+start: ;label
+mov dx,offset mg      ; message Syntax
+mov ah,09h
+int 21h 
+loop start      ;loop syntax   
+
+mov [array1+0],49 ;store 1 (ascii of 1 is 49) at array1+0 address  
+
+mov ah,1 ;to take input from user  and that will store in ax
+int 21h
+
+push ax  ;16 bit is pushed in stack 8 bit can't
+
+mov dx,offset hmm      
+mov ah,09h
+int 21h 
+
+mov dl,[array1+0] ;to display output  dx is used for output
+mov ah,2
+int 21h
+         
+
+call message   ;calling function      
+
+pop ax     ;pop from stack the top value
+mov bx,ax
+       
+cmp ax,bx   ;compare both value      
+je haha      ;je mean if they are equal   jl means ax less  jg means ax large   
+jmp haha    ;unconditional jump
+
+call message    ;calling function 
+
+haha:         
+mov ah, 4ch
+int 21h
+
+message proc   ;function declared syntax
+mov dx,offset msg1     
+mov ah,09h
+int 21h
+ret 
+message endp  
+
+end
